@@ -1,0 +1,3 @@
+function showMessage() {
+    alert("你好！这是JavaScript弹出的消息！");
+}
