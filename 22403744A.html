@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>产品质量保证书</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            font-family: 'SimSun', sans-serif;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .header h2 {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .certificate-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .certificate-table td {
+            border: 1px solid #000;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+
+        .address-section {
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .contact-info {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .english-text {
+            font-family: Arial, sans-serif;
+            font-size: 0.9em;
+        }
+
+        .combined-cell {
+            display: flex;
+            justify-content: space-between;
+        }
+
+
+        /* 新增样式 */
+        .product-name-cell {
+            display: flex;
+            flex-direction: column;  /* 改为垂直布局 */
+            align-items: flex-start; /* 左对齐 */
+            gap: 5px;               /* 添加间距 */
+        }
+
+        /* 原样式保留，修改.combined-cell */
+        .combined-cell {
+            display: flex;
+            flex-direction: column;  /* 垂直排列 */
+            align-items: flex-start; /* 左对齐 */
+            justify-content: flex-start; /* 取消space-between */
+        }
+
+        /* 其他原有样式保持不变... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>江苏沙钢集团淮钢特钢股份有限公司产品质量保证书</h1>
+            <h2 class="english-text">Mill Test Certificate by Jiangsu Shagang Group Huaigang Special Steel Co.,Ltd</h2>
+        </div>
+
+        <table class="certificate-table">
+            <tr>
+                <td>
+                    <div class="combined-cell">
+                        <span>需方：无锡市苗吉金属材料有限公司</span>
+                        <span class="english-text">Buyer</span>
+                    </div>
+                </td>
+                <td>合同号：Z24040160<br><span class="english-text">Contract No.</span></td>
+                <td>炉号：22403744A<br><span class="english-text">L/C Number</span></td>
+                <td>牌号：60Si2Mn<br><span class="english-text">Steel Grade</span></td>
+                
+            </tr>
+            <tr>
+                <td>产品名称：弹簧钢60Si2Mn<br><span class="english-text">Description of Goods</span></td>
+                <td>执行标准：GB/T1222-2016<br><span class="english-text">Standard Adopted</span></td>
+                <td>交货状态：热轧<br><span class="english-text">State of Delivery</span></td>
+                <td>加工用途：铁路扣件<br><span class="english-text">Final Applica</span></td>
+                
+            </tr>
+        </table>
+
+        <div class="address-section">
+            <p>地址：江苏省淮安市南苑路168号</p>
+            <p class="english-text">ADD：NO.188, SOUTH XYAN ROAD,<br>
+            HUIYAN CITY, JIANGSU PROVINCE</p>
+        </div>
+    </div>
+</body>
+</html>
