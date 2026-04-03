@@ -1,0 +1,2240 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Micro CPO vs 传统CPO：数据中心光互连技术对比与发展趋势分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --secondary: #d97706;
+            --accent: #059669;
+            --neutral: #374151;
+            --base-100: #ffffff;
+            --base-200: #f8fafc;
+            --base-300: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--neutral);
+            overflow-x: hidden;
+        }
+        
+        @media (max-width: 400px) {
+            body {
+                overflow-x: hidden;
+            }
+        }
+        
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                rgba(15, 118, 110, 0.95) 0%, 
+                rgba(5, 150, 105, 0.9) 50%, 
+                rgba(217, 119, 6, 0.85) 100%);
+        }
+        
+        .toc-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--base-100);
+            border-right: 2px solid var(--base-300);
+            z-index: 50;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .citation-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted var(--primary);
+        }
+        
+        .citation-link:hover {
+            background-color: rgba(15, 118, 110, 0.1);
+            border-bottom-style: solid;
+        }
+        
+        .comparison-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .tech-highlight {
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .performance-metric {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(15, 118, 110, 0.3);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid var(--base-100);
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 5px;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% - 1.5rem);
+            background: linear-gradient(to bottom, var(--primary), transparent);
+        }
+        
+        /* Mermaid diagram styling */
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; /* 防止触摸设备上的默认行为 */
+            -webkit-user-select: none; /* 防止文本选择 */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mermaid-control-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        @media (max-width: 1024px) {
+            .toc-fixed {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .toc-fixed.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mermaid-control-btn:not(.reset-zoom) {
+                display: none;
+            }
+            .mermaid-controls {
+                top: auto;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-gradient {
+                min-height: auto;
+                padding: 2rem 0;
+            }
+            
+            .hero-gradient .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-gradient h1 {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+            
+            .hero-gradient p.text-xl {
+                font-size: 1rem;
+            }
+            
+            .hero-gradient .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+  <base target="_blank">
+</head>
+
+  <body class="bg-slate-50">
+    <!-- Mobile TOC Toggle -->
+    <button id="mobile-toc-toggle" class="lg:hidden fixed top-4 left-4 z-50 bg-teal-700 text-white p-3 rounded-lg shadow-lg">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Backdrop Overlay -->
+    <div id="toc-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+    <!-- Table of Contents -->
+    <nav id="toc-nav" class="toc-fixed">
+      <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+          <i class="fas fa-sitemap mr-2 text-teal-700"></i>
+          目录导航
+        </h2>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="#executive-summary" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">执行摘要</a>
+          </li>
+          <li>
+            <a href="#tech-definition" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">技术概念界定</a>
+          </li>
+          <li>
+            <a href="#performance-analysis" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">技术性能对比</a>
+          </li>
+          <li>
+            <a href="#cost-analysis" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">成本结构分析</a>
+          </li>
+          <li>
+            <a href="#supply-chain" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">产业链成熟度</a>
+          </li>
+          <li>
+            <a href="#application-scenarios" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">应用场景适配性</a>
+          </li>
+          <li>
+            <a href="#future-trends" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">未来发展趋势</a>
+          </li>
+          <li>
+            <a href="#conclusions" class="block py-2 px-3 rounded hover:bg-gray-100 transition-colors">结论与建议</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="border-t pt-4">
+        <h3 class="text-sm font-semibold text-gray-600 mb-3">关键性能指标</h3>
+        <div class="space-y-2 text-xs text-gray-500">
+          <div class="flex justify-between">
+            <span>功耗效率</span>
+            <span class="font-mono">1-2 pJ/bit</span>
+          </div>
+          <div class="flex justify-between">
+            <span>集成密度</span>
+            <span class="font-mono">&gt;0.5 Tbps/mm²</span>
+          </div>
+          <div class="flex justify-between">
+            <span>传输距离</span>
+            <span class="font-mono">1-10m</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Hero Section -->
+      <section class="hero-gradient text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+            <div>
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold serif italic mb-6 leading-tight">
+                Micro CPO vs 传统CPO
+                <span class="block text-2xl sm:text-3xl lg:text-4xl mt-2 opacity-90">数据中心光互连技术的范式转移</span>
+              </h1>
+              <p class="text-lg sm:text-xl mb-8 opacity-90 leading-relaxed">
+                基于Micro LED光源的CPO 2.0技术以1-2 pJ/bit的极致能效和&gt;0.5 Tbps/mm²的超高集成密度，
+                重新定义AI数据中心机架内互联的经济性与可行性边界
+              </p>
+              <div class="flex flex-wrap gap-4">
+                <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <div class="text-sm opacity-80">能效提升</div>
+                  <div class="text-2xl font-bold">5-10倍</div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <div class="text-sm opacity-80">集成密度</div>
+                  <div class="text-2xl font-bold">3-5倍</div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <div class="text-sm opacity-80">功耗降低</div>
+                  <div class="text-2xl font-bold">95%</div>
+                </div>
+              </div>
+            </div>
+            <div class="relative">
+              <img src="https://kimi-web-img.moonshot.cn/imagegen/20260402/021775060914038f2cf6d116da0c208968e3619b32b85148f72ed_0.jpeg" alt="Micro LED CPO芯片与光纤阵列的精密光学封装特写" class="w-full h-64 sm:h-80 object-cover rounded-2xl shadow-2xl" size="medium" aspect="wide" style="photo" query="Micro LED CPO芯片封装" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-2xl"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section id="executive-summary" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold serif mb-4 text-gray-900">执行摘要</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-teal-600 to-orange-600 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="performance-metric p-6">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-bolt text-2xl mr-3"></i>
+                <h3 class="text-xl font-bold">极致能效</h3>
+              </div>
+              <div class="text-3xl font-bold mb-2">1-2 pJ/bit</div>
+              <p class="text-sm opacity-90">仅为传统CPO的1/5至1/10，消除DSP/FEC/TEC等高功耗组件</p>
+            </div>
+
+            <div class="performance-metric p-6">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-layer-group text-2xl mr-3"></i>
+                <h3 class="text-xl font-bold">超高密度</h3>
+              </div>
+              <div class="text-3xl font-bold mb-2">&gt;0.5 Tbps/mm²</div>
+              <p class="text-sm opacity-90">较传统方案提升3-5倍，突破引脚墙约束</p>
+            </div>
+
+            <div class="performance-metric p-6">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-thermometer-half text-2xl mr-3"></i>
+                <h3 class="text-xl font-bold">简化热管理</h3>
+              </div>
+              <div class="text-3xl font-bold mb-2">无需TEC</div>
+              <p class="text-sm opacity-90">宽温度范围-40°C至125°C，彻底摆脱热电制冷</p>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-teal-50 to-orange-50 rounded-2xl p-8 border border-teal-100">
+            <h3 class="text-2xl font-bold mb-6 text-gray-900">核心洞察</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="w-2 h-2 bg-teal-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <p class="text-gray-700"><strong>短期（2025-2027）：</strong>传统CPO主导市场，Micro CPO处于试点验证阶段</p>
+                </div>
+                <div class="flex items-start">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <p class="text-gray-700"><strong>中期（2027-2030）：</strong>Micro CPO在AI场景快速渗透，两种技术差异化共存</p>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="w-2 h-2 bg-teal-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <p class="text-gray-700"><strong>长期：</strong>技术融合形成CPO 3.0，产业链重构完成</p>
+                </div>
+                <div class="flex items-start">
+                  <div class="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <p class="text-gray-700"><strong>关键节点：</strong>2027-2028年Micro CPO迎来成本临界点，渗透率突破30%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technology Definition -->
+      <section id="tech-definition" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-4xl font-bold serif mb-8 text-center text-gray-900">技术概念界定与演进路线</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                  <span class="text-white font-bold text-xl">1.0</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">传统CPO</h3>
+              </div>
+              <div class="space-y-4">
+                <div class="tech-highlight p-4 rounded-lg">
+                  <h4 class="font-semibold text-gray-800 mb-2">核心特征</h4>
+                  <p class="text-gray-700">基于EEL/VCSEL/硅光激光器，采用&#34;窄而快&#34;高速通道架构</p>
+                </div>
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">单通道速率</span>
+                    <span class="font-mono text-gray-800">112-400 Gb/s</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">典型功耗</span>
+                    <span class="font-mono text-gray-800">4-10 pJ/bit</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">传输距离</span>
+                    <span class="font-mono text-gray-800">10m-2km</span>
+                  </div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                  <h4 class="font-semibold text-blue-800 mb-2">代表产品</h4>
+                  <ul class="text-sm text-blue-700 space-y-1">
+                    <li>• Broadcom Bailly 51.2T CPO交换机</li>
+                    <li>• Intel硅光CPO系统</li>
+                    <li>• 英伟达Quantum-X平台</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center mr-4">
+                  <span class="text-white font-bold text-xl">2.0</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">Micro CPO</h3>
+              </div>
+              <div class="space-y-4">
+                <div class="tech-highlight p-4 rounded-lg">
+                  <h4 class="font-semibold text-gray-800 mb-2">核心特征</h4>
+                  <p class="text-gray-700">基于Micro LED光源，采用&#34;宽而慢&#34;多通道并行架构</p>
+                </div>
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">单通道速率</span>
+                    <span class="font-mono text-gray-800">2-16 Gb/s</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">典型功耗</span>
+                    <span class="font-mono text-gray-800 font-bold">1-2 pJ/bit</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">传输距离</span>
+                    <span class="font-mono text-gray-800">1-10m</span>
+                  </div>
+                </div>
+                <div class="bg-teal-50 p-4 rounded-lg">
+                  <h4 class="font-semibold text-teal-800 mb-2">代表方案</h4>
+                  <ul class="text-sm text-teal-700 space-y-1">
+                    <li>• 微软MOSAIC架构</li>
+                    <li>• 英伟达CPO规格</li>
+                    <li>• 台积电COUPE平台</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg">
+            <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">技术架构对比</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b-2 border-gray-200">
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">对比维度</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">传统CPO（CPO 1.0）</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">Micro CPO（CPO 2.0）</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr>
+                    <td class="py-3 px-4 font-medium text-gray-700">核心光源</td>
+                    <td class="py-3 px-4 text-gray-600">EEL/VCSEL/硅光激光器</td>
+                    <td class="py-3 px-4 text-gray-600 font-bold">Micro LED阵列</td>
+                  </tr>
+                  <tr class="bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-700">架构哲学</td>
+                    <td class="py-3 px-4 text-gray-600">&#34;窄而快&#34;（NaF）</td>
+                    <td class="py-3 px-4 text-gray-600 font-bold">&#34;宽而慢&#34;（WaS）</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 font-medium text-gray-700">通道数量（1.6T示例）</td>
+                    <td class="py-3 px-4 text-gray-600">8-16通道</td>
+                    <td class="py-3 px-4 text-gray-600 font-bold">100-400通道</td>
+                  </tr>
+                  <tr class="bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-700">TEC制冷需求</td>
+                    <td class="py-3 px-4 text-gray-600">必需（功耗占比高）</td>
+                    <td class="py-3 px-4 text-gray-600 font-bold">无需</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 font-medium text-gray-700">带宽密度</td>
+                    <td class="py-3 px-4 text-gray-600">~0.1-0.3 Tbps/mm²</td>
+                    <td class="py-3 px-4 text-gray-600 font-bold">&gt;0.5 Tbps/mm²</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Architecture Comparison Diagram -->
+          <div class="mt-12 bg-white rounded-2xl p-6 shadow-lg">
+            <h3 class="text-xl font-bold mb-4 text-center text-gray-900">架构对比示意图</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TB
+                subgraph &#34;传统CPO架构 (窄而快)&#34;
+                A1[&#34;交换芯片&#34;] --&gt; A2[&#34;高速SerDes
+                <br/>112-400Gbps&#34;]
+                A2 --&gt; A3[&#34;DSP处理器&#34;]
+                A3 --&gt; A4[&#34;激光器驱动&#34;]
+                A4 --&gt; A5[&#34;激光器阵列
+                <br/>8-16通道&#34;]
+                A5 --&gt; A6[&#34;光纤耦合&#34;]
+                A6 --&gt; A7[&#34;单模光纤&#34;]
+
+                style A1 fill:#e3f2fd
+                style A2 fill:#bbdefb
+                style A3 fill:#90caf9
+                style A4 fill:#64b5f6
+                style A5 fill:#42a5f5
+                style A6 fill:#2196f3
+                style A7 fill:#1976d2
+                end
+
+                subgraph &#34;Micro CPO架构 (宽而慢)&#34;
+                B1[&#34;交换芯片&#34;] --&gt; B2[&#34;并行接口
+                <br/>2-16Gbps&#34;]
+                B2 --&gt; B3[&#34;CMOS驱动阵列&#34;]
+                B3 --&gt; B4[&#34;Micro LED阵列
+                <br/>100-400通道&#34;]
+                B4 --&gt; B5[&#34;微透镜耦合&#34;]
+                B5 --&gt; B6[&#34;多芯光纤&#34;]
+
+                style B1 fill:#e8f5e8
+                style B2 fill:#c8e6c9
+                style B3 fill:#a5d6a7
+                style B4 fill:#81c784
+                style B5 fill:#66bb6a
+                style B6 fill:#4caf50
+                end
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Performance Analysis -->
+      <section id="performance-analysis" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-4xl font-bold serif mb-12 text-center text-gray-900">技术性能对比分析</h2>
+
+          <!-- Power Performance -->
+          <div class="mb-16">
+            <h3 class="text-3xl font-bold mb-8 text-gray-900">功耗性能</h3>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              <div class="comparison-card rounded-2xl p-8">
+                <h4 class="text-xl font-bold mb-6 text-gray-900">单比特功耗对比</h4>
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-gray-700">传统铜缆（1.6T）</span>
+                    <span class="font-mono text-gray-800 font-bold">&gt;10 pJ/bit</span>
+                  </div>
+                  <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-gray-700">传统可插拔光模块</span>
+                    <span class="font-mono text-gray-800">15-20 pJ/bit</span>
+                  </div>
+                  <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-gray-700">传统激光器CPO</span>
+                    <span class="font-mono text-gray-800">4-10 pJ/bit</span>
+                  </div>
+                  <div class="flex items-center justify-between p-3 bg-teal-50 rounded-lg border-2 border-teal-200">
+                    <span class="text-teal-800 font-semibold">Micro LED CPO</span>
+                    <span class="font-mono text-teal-800 font-bold">1-2 pJ/bit</span>
+                  </div>
+                </div>
+                <div class="mt-6 p-4 bg-teal-50 rounded-lg">
+                  <p class="text-sm text-teal-700">
+                    <strong>数据来源：</strong>
+                    <a href="#" class="citation-link">TrendForce</a>、
+                    <a href="#" class="citation-link">英伟达</a>、
+                    <a href="#" class="citation-link">博通</a>、
+                    <a href="#" class="citation-link">Intel</a>
+                  </p>
+                </div>
+              </div>
+
+              <div class="comparison-card rounded-2xl p-8">
+                <h4 class="text-xl font-bold mb-6 text-gray-900">系统总功耗对比（1.6T示例）</h4>
+                <div class="space-y-6">
+                  <div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-gray-700">传统方案</span>
+                      <span class="font-mono text-gray-800">~30W</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                      <div class="bg-red-500 h-3 rounded-full" style="width: 100%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-gray-700">传统CPO</span>
+                      <span class="font-mono text-gray-800">~9-15W</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                      <div class="bg-orange-500 h-3 rounded-full" style="width: 40%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-2">
+                      <span class="text-gray-700 font-semibold">Micro CPO</span>
+                      <span class="font-mono text-teal-800 font-bold">~1.6W</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                      <div class="bg-teal-600 h-3 rounded-full" style="width: 5%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-6 p-4 bg-teal-50 rounded-lg">
+                  <p class="text-sm text-teal-700">
+                    <strong>节能效果：</strong>较传统方案降低95%，较传统CPO降低约90%
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-50 to-teal-50 rounded-2xl p-8">
+              <h4 class="text-xl font-bold mb-6 text-gray-900">热管理需求差异</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg p-6 border border-blue-200">
+                  <h5 class="font-semibold text-blue-800 mb-3">传统CPO挑战</h5>
+                  <ul class="space-y-2 text-sm text-gray-700">
+                    <li class="flex items-start">
+                      <i class="fas fa-exclamation-triangle text-orange-500 mr-2 mt-1 text-xs"></i>
+                      <span>激光器温度敏感性：0.08-0.1 nm/°C波长漂移</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-exclamation-triangle text-orange-500 mr-2 mt-1 text-xs"></i>
+                      <span>必需TEC制冷，COP仅0.5-1.5，能效代价显著</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-exclamation-triangle text-orange-500 mr-2 mt-1 text-xs"></i>
+                      <span>热串扰问题突出，温度升高8°C可导致9dB性能劣化</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="bg-white rounded-lg p-6 border border-teal-200">
+                  <h5 class="font-semibold text-teal-800 mb-3">Micro CPO优势</h5>
+                  <ul class="space-y-2 text-sm text-gray-700">
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mr-2 mt-1 text-xs"></i>
+                      <span>宽温度范围：-40°C至125°C，无需TEC制冷</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mr-2 mt-1 text-xs"></i>
+                      <span>85°C高温下仍维持90%以上光输出</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-green-500 mr-2 mt-1 text-xs"></i>
+                      <span>低热功耗支持3D堆叠封装，进一步提升集成密度</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bandwidth Performance -->
+          <div class="mb-16">
+            <h3 class="text-3xl font-bold mb-8 text-gray-900">带宽性能</h3>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              <div class="comparison-card rounded-2xl p-8">
+                <h4 class="text-xl font-bold mb-6 text-gray-900">单通道速率对比</h4>
+                <div class="space-y-4">
+                  <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <h5 class="font-semibold text-blue-800 mb-2">传统CPO</h5>
+                    <div class="space-y-2 text-sm">
+                      <div class="flex justify-between">
+                        <span>商用部署</span>
+                        <span class="font-mono">112Gb/s PAM4</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>技术验证</span>
+                        <span class="font-mono">200Gb/s/lane</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>预研阶段</span>
+                        <span class="font-mono">400Gb/s/lane</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                    <h5 class="font-semibold text-teal-800 mb-2">Micro CPO</h5>
+                    <div class="space-y-2 text-sm">
+                      <div class="flex justify-between">
+                        <span>商用水平</span>
+                        <span class="font-mono">4-8 Gb/s</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>实验室原型</span>
+                        <span class="font-mono">10-16 Gb/s</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>物理上限</span>
+                        <span class="font-mono">~20 Gb/s</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="comparison-card rounded-2xl p-8">
+                <h4 class="text-xl font-bold mb-6 text-gray-900">总带宽实现方式</h4>
+                <div class="space-y-6">
+                  <div>
+                    <h5 class="font-semibold text-gray-800 mb-3">传统CPO：少通道高速聚合</h5>
+                    <div class="text-sm text-gray-600 mb-3">演进路线：100G → 400G → 800G → 1.6T → 3.2T</div>
+                    <div class="bg-gray-50 p-3 rounded text-sm">
+                      <span class="font-mono">1.6T = 8×200G</span>
+                      <br/>
+                      <span class="font-mono">3.2T = 8×400G</span>
+                    </div>
+                  </div>
+                  <div>
+                    <h5 class="font-semibold text-gray-800 mb-3">Micro CPO：多通道并行堆叠</h5>
+                    <div class="text-sm text-gray-600 mb-3">通道数量爆炸式增长：100-1600通道</div>
+                    <div class="bg-teal-50 p-3 rounded text-sm">
+                      <span class="font-mono">200G = 100×2G</span>
+                      <br/>
+                      <span class="font-mono">1.6T = 400×4G</span>
+                      <br/>
+                      <span class="font-mono">3.2T = 800×4G</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <h4 class="text-xl font-bold mb-6 text-center text-gray-900">传输距离适用性</h4>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="border-b-2 border-gray-200">
+                      <th class="text-left py-3 px-4 font-semibold text-gray-800">传输距离</th>
+                      <th class="text-left py-3 px-4 font-semibold text-gray-800">适用技术</th>
+                      <th class="text-left py-3 px-4 font-semibold text-gray-800">典型应用场景</th>
+                      <th class="text-center py-3 px-4 font-semibold text-gray-800">Micro CPO适用性</th>
+                      <th class="text-center py-3 px-4 font-semibold text-gray-800">传统CPO适用性</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    <tr class="bg-green-50">
+                      <td class="py-3 px-4 font-medium text-gray-700">&lt;1米</td>
+                      <td class="py-3 px-4 text-gray-600">铜缆/Micro CPO</td>
+                      <td class="py-3 px-4 text-gray-600">芯片间、板级互联</td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="bg-teal-50">
+                      <td class="py-3 px-4 font-medium text-gray-700">1-10米</td>
+                      <td class="py-3 px-4 text-gray-600 font-bold">Micro CPO/铜缆</td>
+                      <td class="py-3 px-4 text-gray-600 font-bold">机架内互联</td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-3 px-4 font-medium text-gray-700">10-50米</td>
+                      <td class="py-3 px-4 text-gray-600">传统CPO/VCSEL</td>
+                      <td class="py-3 px-4 text-gray-600">机架间、列间互联</td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-3 px-4 font-medium text-gray-700">50-500米</td>
+                      <td class="py-3 px-4 text-gray-600">传统硅光CPO</td>
+                      <td class="py-3 px-4 text-gray-600">数据中心骨干</td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                          <i class="fas fa-star text-gray-300"></i>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center">
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                          <i class="fas fa-star text-yellow-500"></i>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Integration &amp; Packaging -->
+          <div class="mb-16">
+            <h3 class="text-3xl font-bold mb-8 text-gray-900">集成度与封装</h3>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              <div class="comparison-card rounded-2xl p-8">
+                <h4 class="text-xl font-bold mb-6 text-gray-900">光源尺寸与集成密度</h4>
+                <div class="space-y-6">
+                  <div>
+                    <h5 class="font-semibold text-gray-800 mb-3">Micro LED尺寸优势</h5>
+                    <div class="space-y-2 text-sm">
+                      <div class="flex justify-between">
+                        <span>芯片厚度</span>
+                        <span class="font-mono text-teal-700 font-bold">10μm级</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>发光区域</span>
+                        <span class="font-mono text-teal-700 font-bold">&lt;20μm边长</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>体积缩小</span>
+                        <span class="font-mono text-teal-700 font-bold">1000倍以上</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h5 class="font-semibold text-gray-800 mb-3">带宽密度对比</h5>
+                    <div class="space-y-2 text-sm">
+                      <div class="flex justify-between">
+                        <span>传统激光器CPO</span>
+                        <span class="font-mono text-gray-600">&lt;0.1 Tbps/mm²</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>VCSEL</span>
+                        <span class="font-mono text-gray-600">~0.2 Tbps/mm²</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>硅光激光器</span>
+                        <span class="font-mono text-gray-600">~0.3 Tbps/mm²</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="font-semibold text-teal-800">Micro LED</span>
+                        <span class="font-mono text-teal-800 font-bold">&gt;0.5 Tbps/mm²</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="comparison-card rounded-2xl p-8">
+                <h4 class="text-xl font-bold mb-6 text-gray-900">封装复杂度与散热设计</h4>
+                <div class="space-y-6">
+                  <div>
+                    <h5 class="font-semibold text-blue-800 mb-3">传统CPO封装挑战</h5>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                      <li class="flex items-start">
+                        <i class="fas fa-cog text-blue-500 mr-2 mt-1 text-xs"></i>
+                        <span>高速SerDes设计复杂，阻抗控制严格</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-cog text-blue-500 mr-2 mt-1 text-xs"></i>
+                        <span>激光器与硅波导耦合效率关键</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-cog text-blue-500 mr-2 mt-1 text-xs"></i>
+                        <span>热串扰问题突出，需复杂散热设计</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-cog text-blue-500 mr-2 mt-1 text-xs"></i>
+                        <span>2.5D/3D封装工艺复杂，成本高昂</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="font-semibold text-teal-800 mb-3">Micro CPO封装优势</h5>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                      <li class="flex items-start">
+                        <i class="fas fa-check text-green-500 mr-2 mt-1 text-xs"></i>
+                        <span>低速电接口，CMOS工艺兼容性好</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-check text-green-500 mr-2 mt-1 text-xs"></i>
+                        <span>无需TEC和复杂散热结构</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-check text-green-500 mr-2 mt-1 text-xs"></i>
+                        <span>3D堆叠封装成为可能，集成度更高</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-exclamation-triangle text-orange-500 mr-2 mt-1 text-xs"></i>
+                        <span>多通道高精度耦合，对准难度指数级增长</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cost Analysis -->
+      <section id="cost-analysis" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-4xl font-bold serif mb-12 text-center text-gray-900">成本结构分析</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="comparison-card rounded-2xl p-8">
+              <h3 class="text-2xl font-bold mb-6 text-gray-900">当前成本水平</h3>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">光源成本结构</h4>
+                  <div class="space-y-3">
+                    <div class="flex justify-between items-center p-3 bg-teal-50 rounded-lg">
+                      <span class="text-teal-800 font-medium">Micro LED</span>
+                      <div class="text-right">
+                        <div class="font-mono text-teal-800 font-bold">$10-50</div>
+                        <div class="text-xs text-teal-600">快速下降（年降30%）</div>
+                      </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <span class="text-gray-700">EML激光器</span>
+                      <div class="text-right">
+                        <div class="font-mono text-gray-800">$50-200</div>
+                        <div class="text-xs text-gray-600">缓慢下降</div>
+                      </div>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <span class="text-gray-700">VCSEL</span>
+                      <div class="text-right">
+                        <div class="font-mono text-gray-800">$20-100</div>
+                        <div class="text-xs text-gray-600">中等下降</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">系统总成本构成</h4>
+                  <div class="bg-white p-4 rounded-lg border border-gray-200">
+                    <div class="space-y-2 text-sm">
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">Micro CPO节省项：</span>
+                        <span class="text-green-600 font-medium">-DSP/FEC/TEC</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">新增成本项：</span>
+                        <span class="text-orange-600 font-medium">+多通道耦合</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-gray-600">净成本影响：</span>
+                        <span class="text-gray-800 font-medium">基本持平</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-card rounded-2xl p-8">
+              <h3 class="text-2xl font-bold mb-6 text-gray-900">成本演进趋势</h3>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">规模效应潜力</h4>
+                  <div class="space-y-3">
+                    <div class="bg-teal-50 p-3 rounded-lg">
+                      <div class="font-medium text-teal-800 mb-1">Micro CPO优势</div>
+                      <ul class="text-sm text-teal-700 space-y-1">
+                        <li>• 与显示产业共享供应链</li>
+                        <li>• CMOS工艺高度成熟</li>
+                        <li>• AI数据中心需求爆发</li>
+                      </ul>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                      <div class="font-medium text-gray-700 mb-1">传统CPO局限</div>
+                      <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 磷化铟材料供应受限</li>
+                        <li>• 高速DSP研发成本指数增长</li>
+                        <li>• 热管理技术改进空间有限</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">量产时间节点</h4>
+                  <div class="space-y-2">
+                    <div class="timeline-item">
+                      <div class="timeline-line"></div>
+                      <div class="font-medium text-gray-800">2026-2027</div>
+                      <div class="text-sm text-gray-600">Micro CPO小规模量产</div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="timeline-line"></div>
+                      <div class="font-medium text-gray-800">2027-2028</div>
+                      <div class="text-sm text-gray-600">关键爆发点（90倍增长）</div>
+                    </div>
+                    <div class="timeline-item">
+                      <div class="font-medium text-gray-800">2028年后</div>
+                      <div class="text-sm text-gray-600">成本临界点，大规模商用</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cost Timeline Diagram -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <h3 class="text-xl font-bold mb-4 text-center text-gray-900">成本演进时间线</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                timeline
+                title &#34;Micro CPO成本演进时间线&#34;
+                2025 : &#34;技术验证&#34;
+                : &#34;客户送样&#34;
+                : &#34;成本较高&#34;
+                2026-2027 : &#34;小规模量产&#34;
+                : &#34;标准发布&#34;
+                : &#34;成本下降30%&#34;
+                2027-2028 : &#34;爆发增长&#34;
+                : &#34;规模效应显现&#34;
+                : &#34;成本下降50%&#34;
+                2028-2030 : &#34;成本临界点&#34;
+                : &#34;大规模商用&#34;
+                : &#34;成本下降70%&#34;
+                2030+ : &#34;技术融合&#34;
+                : &#34;成本优势显著&#34;
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Supply Chain -->
+      <section id="supply-chain" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-4xl font-bold serif mb-12 text-center text-gray-900">产业链成熟度评估</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-industry text-3xl text-blue-600 mr-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900">上游供应链</h3>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">光源供应</h4>
+                  <div class="space-y-3">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                      <div class="font-medium text-blue-800 mb-1">传统CPO</div>
+                      <div class="text-sm text-blue-700">
+                        Lumentum、Coherent、Intel等主导，6英寸InP产线扩产中
+                      </div>
+                    </div>
+                    <div class="bg-teal-50 p-3 rounded-lg">
+                      <div class="font-medium text-teal-800 mb-1">Micro CPO</div>
+                      <div class="text-sm text-teal-700">
+                        三安光电、华灿光电、兆驰股份等LED厂商快速切入，6英寸线进入验证
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">关键设备与材料</h4>
+                  <div class="text-sm text-gray-600 space-y-1">
+                    <div>• 巨量转移设备：新益昌等龙头已适配CPO需求</div>
+                    <div>• TGV玻璃基板：沃格光电完成小批量送样</div>
+                    <div>• 磷化铟vs硅基材料：成本结构差异显著</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-cogs text-3xl text-orange-600 mr-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900">中游制造能力</h3>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">封装测试</h4>
+                  <div class="space-y-3">
+                    <div class="text-sm text-gray-700">
+                      <div class="font-medium mb-1">传统CPO</div>
+                      <div>COB、2.5D/3D集成工艺相对成熟，台积电COUPE平台提供多样化选择</div>
+                    </div>
+                    <div class="text-sm text-gray-700">
+                      <div class="font-medium mb-1">Micro CPO</div>
+                      <div>多通道并行封装待成熟，中际旭创已建CPO专用产线，通富微电掌握异构集成技术</div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">良率控制</h4>
+                  <div class="bg-gray-50 p-3 rounded-lg text-sm">
+                    <div class="flex justify-between mb-2">
+                      <span class="text-gray-700">传统CPO硅光方案</span>
+                      <span class="text-red-600 font-medium">&lt;45%良率瓶颈</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-700">Micro LED巨量转移</span>
+                      <span class="text-green-600 font-medium">99.99%+良率</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-network-wired text-3xl text-green-600 mr-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900">下游应用生态</h3>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">客户验证进度</h4>
+                  <div class="space-y-3">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                      <div class="font-medium text-blue-800 mb-1">传统CPO</div>
+                      <div class="text-sm text-blue-700">
+                        博通向Meta、字节跳动交付51.2T CPO交换机
+                        <br/>
+                        英伟达2026年部署Quantum-2 CPO系统
+                      </div>
+                    </div>
+                    <div class="bg-teal-50 p-3 rounded-lg">
+                      <div class="font-medium text-teal-800 mb-1">Micro CPO</div>
+                      <div class="text-sm text-teal-700">
+                        微软MOSAIC 800G原型测试成功
+                        <br/>
+                        英伟达GB200预留CPO接口
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">标准制定状态</h4>
+                  <div class="text-sm text-gray-600 space-y-1">
+                    <div>• IEEE 802.3ct：2026年完成</div>
+                    <div>• OCP基金会：Micro LED纳入2026年草案</div>
+                    <div>• UCIe标准：实现芯粒跨厂商兼容</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supply Chain Diagram -->
+          <div class="bg-slate-50 rounded-2xl p-6">
+            <h3 class="text-xl font-bold mb-4 text-center text-gray-900">产业链生态图</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TD
+                subgraph &#34;上游供应链&#34;
+                A1[&#34;外延片供应商&#34;]
+                A2[&#34;芯片制造&#34;]
+                A3[&#34;关键设备&#34;]
+
+                A1 --&gt; A11[&#34;AXT/IQE&#34;]
+                A1 --&gt; A12[&#34;三安光电&#34;]
+                A1 --&gt; A13[&#34;华灿光电&#34;]
+
+                A2 --&gt; A21[&#34;Lumentum&#34;]
+                A2 --&gt; A22[&#34;Coherent&#34;]
+                A2 --&gt; A23[&#34;錼创/鼎元&#34;]
+
+                A3 --&gt; A31[&#34;MOCVD设备&#34;]
+                A3 --&gt; A32[&#34;巨量转移设备&#34;]
+                A3 --&gt; A33[&#34;检测设备&#34;]
+                end
+
+                subgraph &#34;中游制造&#34;
+                B1[&#34;封装测试&#34;]
+                B2[&#34;OSAT服务&#34;]
+
+                B1 --&gt; B11[&#34;COB封装&#34;]
+                B1 --&gt; B12[&#34;2.5D/3D集成&#34;]
+                B1 --&gt; B13[&#34;多通道耦合&#34;]
+
+                B2 --&gt; B21[&#34;日月光&#34;]
+                B2 --&gt; B22[&#34;长电科技&#34;]
+                B2 --&gt; B23[&#34;通富微电&#34;]
+                end
+
+                subgraph &#34;下游应用&#34;
+                C1[&#34;云服务商&#34;]
+                C2[&#34;设备商&#34;]
+
+                C1 --&gt; C11[&#34;微软MOSAIC&#34;]
+                C1 --&gt; C12[&#34;谷歌TPU&#34;]
+                C1 --&gt; C13[&#34;AWS&#34;]
+
+                C2 --&gt; C21[&#34;英伟达CPO&#34;]
+                C2 --&gt; C22[&#34;博通Bailly&#34;]
+                C2 --&gt; C23[&#34;Intel硅光&#34;]
+                end
+
+                A11 --&gt; B1
+                A12 --&gt; B1
+                A21 --&gt; B1
+                A22 --&gt; B1
+
+                B1 --&gt; B2
+                B2 --&gt; C1
+                B2 --&gt; C2
+
+                style A1 fill:#e3f2fd
+                style A2 fill:#e3f2fd
+                style A3 fill:#e3f2fd
+                style B1 fill:#fff3e0
+                style B2 fill:#fff3e0
+                style C1 fill:#e8f5e8
+                style C2 fill:#e8f5e8
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Application Scenarios -->
+      <section id="application-scenarios" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-4xl font-bold serif mb-12 text-center text-gray-900">数据中心应用场景适配性</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-brain text-3xl text-purple-600 mr-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900">AI训练集群互联</h3>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">机架内/机架间互联</h4>
+                  <div class="space-y-3">
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                      <h5 class="font-semibold text-teal-800 mb-2">Micro CPO优势场景</h5>
+                      <ul class="text-sm text-teal-700 space-y-1">
+                        <li>• 机架内互联（1-10米）：超低功耗替代铜缆</li>
+                        <li>• GB200/Blackwell架构：预留标准化接口</li>
+                        <li>• 功耗敏感场景：95%功耗降低，年节约电费千万美元</li>
+                      </ul>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                      <h5 class="font-semibold text-blue-800 mb-2">传统CPO优势场景</h5>
+                      <ul class="text-sm text-blue-700 space-y-1">
+                        <li>• 机架间互联（10-100米）：更长距离覆盖</li>
+                        <li>• 高速率需求：112-400G/lane单通道</li>
+                        <li>• 成熟生态：供应链稳定，风险可控</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">功耗敏感场景</h4>
+                  <div class="bg-white p-4 rounded-lg border border-gray-200">
+                    <div class="text-sm text-gray-700 space-y-2">
+                      <div class="flex justify-between">
+                        <span>10万卡集群年耗电</span>
+                        <span class="font-mono text-gray-800">~2.5亿度（传统）</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>Micro CPO方案</span>
+                        <span class="font-mono text-green-600 font-bold">~700万度</span>
+                      </div>
+                      <div class="flex justify-between border-t pt-2">
+                        <span class="font-medium">年节约电费</span>
+                        <span class="font-mono text-green-600 font-bold">&gt;1.2亿度</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-cloud text-3xl text-sky-600 mr-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900">云计算与通用数据中心</h3>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">成本敏感型部署</h4>
+                  <div class="space-y-3">
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                      <h5 class="font-semibold text-blue-800 mb-2">传统CPO优势</h5>
+                      <ul class="text-sm text-blue-700 space-y-1">
+                        <li>• 初期CAPEX相对较低</li>
+                        <li>• 技术成熟度高，部署风险小</li>
+                        <li>• 按需配置模式，资金压力小</li>
+                      </ul>
+                    </div>
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                      <h5 class="font-semibold text-teal-800 mb-2">Micro CPO长期优势</h5>
+                      <ul class="text-sm text-teal-700 space-y-1">
+                        <li>• 3-5年TCO显著优势</li>
+                        <li>• 电力成本节省可观</li>
+                        <li>• 散热基础设施投资降低</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">升级演进路径</h4>
+                  <div class="space-y-3">
+                    <div class="bg-white p-3 rounded border border-gray-200">
+                      <div class="font-medium text-gray-800 mb-1">传统CPO</div>
+                      <div class="text-sm text-gray-600">
+                        速率演进受激光器物理限制，向400Gb/s/lane升级需材料突破
+                      </div>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-gray-200">
+                      <div class="font-medium text-gray-800 mb-1">Micro CPO</div>
+                      <div class="text-sm text-gray-600">
+                        &#34;横向扩展&#34;特征，通过增加通道数实现带宽升级，技术风险可控
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Application Scenario Selection Guide -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg">
+            <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">技术选型决策矩阵</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b-2 border-gray-200">
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">应用场景</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">推荐技术</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">关键决策因素</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr class="bg-green-50">
+                    <td class="py-3 px-4 font-medium text-gray-700">机架内高密度互联（&lt;10m）</td>
+                    <td class="py-3 px-4 text-gray-800 font-bold">Micro CPO</td>
+                    <td class="py-3 px-4 text-gray-600">极致能效、超低功耗、高可靠性</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 font-medium text-gray-700">机架间中距离互联（10-100m）</td>
+                    <td class="py-3 px-4 text-gray-800">传统CPO/Micro CPO混合</td>
+                    <td class="py-3 px-4 text-gray-600">距离覆盖、功耗权衡、生态兼容</td>
+                  </tr>
+                  <tr class="bg-blue-50">
+                    <td class="py-3 px-4 font-medium text-gray-700">数据中心骨干（&gt;100m）</td>
+                    <td class="py-3 px-4 text-gray-800 font-bold">传统硅光CPO</td>
+                    <td class="py-3 px-4 text-gray-600">长距离传输、WDM效率、标准化</td>
+                  </tr>
+                  <tr class="bg-purple-50">
+                    <td class="py-3 px-4 font-medium text-gray-700">吉瓦级AI工厂</td>
+                    <td class="py-3 px-4 text-gray-800 font-bold">Micro CPO为主</td>
+                    <td class="py-3 px-4 text-gray-600">TCO优化、可持续发展、扩展性</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 font-medium text-gray-700">通用云计算（成本敏感）</td>
+                    <td class="py-3 px-4 text-gray-800">传统CPO/NPO过渡</td>
+                    <td class="py-3 px-4 text-gray-600">CAPEX控制、快速部署、灵活性</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Future Trends -->
+      <section id="future-trends" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-4xl font-bold serif mb-12 text-center text-gray-900">未来发展趋势研判</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-atom text-3xl text-indigo-600 mr-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900">技术融合方向</h3>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">混合架构探索</h4>
+                  <div class="space-y-3">
+                    <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                      <h5 class="font-semibold text-indigo-800 mb-2">光电融合架构</h5>
+                      <p class="text-sm text-indigo-700">
+                        高速传统激光器与Micro LED协同：短距用Micro CPO，长距用传统CPO
+                      </p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                      <h5 class="font-semibold text-purple-800 mb-2">EPIC芯片（CPO 3.0）</h5>
+                      <p class="text-sm text-purple-700">
+                        电子-光子集成芯片：单片集成计算、存储、光互连，5-10年发展周期
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">新材料与新结构</h4>
+                  <div class="text-sm text-gray-600 space-y-2">
+                    <div>• 量子点Micro LED：波长可控，调制带宽提升</div>
+                    <div>• 二维材料异质集成：超宽带调制</div>
+                    <div>• 薄膜铌酸锂：百GHz级调制带宽</div>
+                    <div>• 玻璃基板：超低粗糙度，高频性能优异</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-card rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <i class="fas fa-chart-line text-3xl text-green-600 mr-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900">市场演进预测</h3>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">短期（2025-2027）</h4>
+                  <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <ul class="text-sm text-blue-700 space-y-1">
+                      <li>• 传统CPO主导市场，英伟达、博通试点部署</li>
+                      <li>• Micro CPO试点验证，2026年商用元年</li>
+                      <li>• 标准化建设关键，IEEE 802.3ct标准发布</li>
+                    </ul>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">中期（2027-2030）</h4>
+                  <div class="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                    <ul class="text-sm text-teal-700 space-y-1">
+                      <li>• Micro CPO份额快速提升，2028年渗透率30%-50%</li>
+                      <li>• 技术差异化定位：Micro CPO主攻短距，传统CPO覆盖长距</li>
+                      <li>• 市场爆发点：90倍增长，成本临界点到来</li>
+                    </ul>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">长期（2030年后）</h4>
+                  <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <ul class="text-sm text-purple-700 space-y-1">
+                      <li>• 技术融合形成CPO 3.0（EPIC）</li>
+                      <li>• Micro CPO主导AI数据中心短距互联</li>
+                      <li>• 光子计算与光互连深度融合</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Market Evolution Prediction -->
+          <div class="bg-gradient-to-r from-blue-50 to-teal-50 rounded-2xl p-8 mb-16">
+            <h3 class="text-2xl font-bold mb-6 text-center text-gray-900">市场份额演进预测</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div class="bg-white rounded-lg p-6 text-center">
+                <div class="text-3xl font-bold text-blue-600 mb-2">2026年</div>
+                <div class="text-sm text-gray-600 mb-4">商用元年</div>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span>Micro CPO</span>
+                    <span class="font-mono text-blue-600 font-bold">10%-15%</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>传统CPO</span>
+                    <span class="font-mono text-gray-600">70%-80%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg p-6 text-center">
+                <div class="text-3xl font-bold text-teal-600 mb-2">2027-2028</div>
+                <div class="text-sm text-gray-600 mb-4">关键爆发点</div>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span>Micro CPO</span>
+                    <span class="font-mono text-teal-600 font-bold">30%-50%</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>传统CPO</span>
+                    <span class="font-mono text-gray-600">50%-60%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg p-6 text-center">
+                <div class="text-3xl font-bold text-purple-600 mb-2">2029-2030</div>
+                <div class="text-sm text-gray-600 mb-4">差异化共存</div>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span>Micro CPO</span>
+                    <span class="font-mono text-purple-600 font-bold">40%-50%</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>传统CPO</span>
+                    <span class="font-mono text-gray-600">40%-50%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Future Technology Roadmap -->
+          <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <h3 class="text-xl font-bold mb-4 text-center text-gray-900">技术发展路线图</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TD
+                subgraph &#34;当前状态 2025&#34;
+                A1[&#34;CPO 1.0: 传统激光器&#34;]
+                A2[&#34;CPO 2.0: Micro LED试点&#34;]
+                end
+
+                subgraph &#34;短期发展 2025-2027&#34;
+                B1[&#34;传统CPO量产部署&#34;]
+                B2[&#34;Micro CPO小规模商用&#34;]
+                B3[&#34;标准化推进&#34;]
+                end
+
+                subgraph &#34;中期发展 2027-2030&#34;
+                C1[&#34;Micro CPO快速渗透&#34;]
+                C2[&#34;技术差异化共存&#34;]
+                C3[&#34;成本临界点突破&#34;]
+                end
+
+                subgraph &#34;长期发展 2030+&#34;
+                D1[&#34;CPO 3.0: EPIC融合&#34;]
+                D2[&#34;光子计算融合&#34;]
+                D3[&#34;颠覆性创新&#34;]
+                end
+
+                A1 --&gt; B1
+                A2 --&gt; B2
+                B1 --&gt; C1
+                B2 --&gt; C2
+                C1 --&gt; D1
+                C2 --&gt; D2
+                D1 --&gt; D3
+                D2 --&gt; D3
+
+                style A1 fill:#e3f2fd
+                style A2 fill:#e8f5e8
+                style B1 fill:#bbdefb
+                style B2 fill:#c8e6c9
+                style C1 fill:#90caf9
+                style C2 fill:#a5d6a7
+                style D1 fill:#64b5f6
+                style D2 fill:#81c784
+                style D3 fill:#42a5f5
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conclusions -->
+      <section id="conclusions" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-4xl font-bold serif mb-12 text-center text-gray-900">结论与战略建议</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div class="comparison-card rounded-2xl p-8">
+              <h3 class="text-2xl font-bold mb-6 text-gray-900">技术路线选择考量</h3>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">应用场景匹配</h4>
+                  <div class="text-sm text-gray-600 space-y-2">
+                    <div>• <strong>机架内高密度互联：</strong> Micro CPO不可替代，95%功耗降低+&gt;0.5 Tbps/mm²密度</div>
+                    <div>• <strong>机架间中距离：</strong> 混合部署，权衡距离与功耗</div>
+                    <div>• <strong>数据中心骨干：</strong> 传统硅光CPO长距优势</div>
+                    <div>• <strong>吉瓦级AI工厂：</strong> Micro CPO为主，TCO优化关键</div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">投资周期与风险权衡</h4>
+                  <div class="space-y-3">
+                    <div class="bg-teal-50 p-3 rounded-lg">
+                      <div class="font-medium text-teal-800 mb-1">Micro CPO</div>
+                      <div class="text-sm text-teal-700">
+                        技术上升期，2026-2027年关键验证期，高风险高回报
+                      </div>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                      <div class="font-medium text-blue-800 mb-1">传统CPO</div>
+                      <div class="text-sm text-blue-700">
+                        量产初期，技术风险可控，利润率压缩压力
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-card rounded-2xl p-8">
+              <h3 class="text-2xl font-bold mb-6 text-gray-900">产业链布局建议</h3>
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">上游技术储备</h4>
+                  <div class="space-y-3">
+                    <div class="bg-green-50 p-3 rounded-lg">
+                      <div class="font-medium text-green-800 mb-1">Micro CPO路线</div>
+                      <div class="text-sm text-green-700">
+                        布局Micro LED外延片制造，投资巨量转移设备国产化
+                      </div>
+                    </div>
+                    <div class="bg-indigo-50 p-3 rounded-lg">
+                      <div class="font-medium text-indigo-800 mb-1">传统CPO路线</div>
+                      <div class="text-sm text-indigo-700">
+                        锁定磷化铟激光器供应，深化硅光代工平台合作
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">中游制造能力建设</h4>
+                  <div class="text-sm text-gray-600 space-y-2">
+                    <div>• 封装测试：多通道并行工艺开发，晶圆级联合测试</div>
+                    <div>• 良率控制：巨量转移良率提升，通道一致性优化</div>
+                    <div>• 合作模式：&#34;OSAT合作+核心工艺自建&#34;混合模式</div>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-3">下游生态合作</h4>
+                  <div class="text-sm text-gray-600 space-y-2">
+                    <div>• 与头部云厂商深度合作：技术验证、试点部署</div>
+                    <div>• 跨产业联盟建设：OCP、OIF、UCIe标准组织参与</div>
+                    <div>• 显示/半导体产业合作：共享制造与供应链</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Recommendations -->
+          <div class="bg-gradient-to-r from-teal-600 to-blue-600 text-white rounded-2xl p-8">
+            <h3 class="text-3xl font-bold mb-6 text-center">核心战略建议</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="text-center">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-clock text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">把握时间窗口</h4>
+                <p class="text-sm opacity-90">
+                  2025-2030年是技术路线选择关键期，2027-2028年Micro CPO迎来成本临界点
+                </p>
+              </div>
+              <div class="text-center">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-balance-scale text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">投资组合策略</h4>
+                <p class="text-sm opacity-90">
+                  传统CPO保障短期现金流，Micro CPO布局长期竞争力，关注EPIC融合技术
+                </p>
+              </div>
+              <div class="text-center">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-network-wired text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">生态协同建设</h4>
+                <p class="text-sm opacity-90">
+                  跨产业合作，标准制定参与，供应链安全布局，构建可持续竞争优势
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Final Summary -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg mt-12">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">总结</h3>
+              <div class="w-24 h-1 bg-gradient-to-r from-teal-600 to-blue-600 mx-auto mb-6"></div>
+            </div>
+            <div class="text-lg text-gray-700 leading-relaxed text-center max-w-4xl mx-auto">
+              <p class="mb-4">
+                Micro CPO与传统CPO代表了数据中心光互连技术的两条演进路径，前者以<strong>极致能效和超高密度</strong>重新定义短距互联的经济性，后者以<strong>成熟技术和距离灵活性</strong>覆盖更广泛的应用场景。
+              </p>
+              <p class="mb-4">
+                <strong>2025-2030年</strong>是技术路线选择和产业格局重塑的关键窗口，应用场景匹配、投资周期权衡和产业链布局将决定各参与方的长期竞争力。
+              </p>
+              <p>
+                对于产业决策者，<strong>投资组合策略</strong>——以传统CPO保障短期现金流，以Micro CPO布局长期竞争力，持续关注EPIC等融合技术——将是平衡风险与回报的最佳选择。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+        // Mobile TOC Toggle
+        const mobileToggle = document.getElementById('mobile-toc-toggle');
+        const tocNav = document.getElementById('toc-nav');
+        const tocBackdrop = document.getElementById('toc-backdrop');
+        
+        mobileToggle.addEventListener('click', () => {
+            tocNav.classList.toggle('mobile-open');
+            tocBackdrop.classList.toggle('hidden');
+        });
+        
+        // Close TOC when clicking outside or on backdrop
+        tocBackdrop.addEventListener('click', () => {
+            tocNav.classList.remove('mobile-open');
+            tocBackdrop.classList.add('hidden');
+        });
+        
+        // Close TOC when clicking on a TOC link
+        document.querySelectorAll('#toc-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                tocNav.classList.remove('mobile-open');
+                tocBackdrop.classList.add('hidden');
+            });
+        });
+        
+        // Reset TOC on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                tocNav.classList.remove('mobile-open');
+                tocBackdrop.classList.add('hidden');
+            }
+        });
+
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors with good contrast for text
+                primaryColor: '#0f766e',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#0f766e',
+                
+                // Secondary colors
+                secondaryColor: '#d97706',
+                secondaryTextColor: '#ffffff',
+                secondaryBorderColor: '#d97706',
+                
+                // Tertiary colors
+                tertiaryColor: '#059669',
+                tertiaryTextColor: '#ffffff',
+                tertiaryBorderColor: '#059669',
+                
+                // Background and surface colors
+                background: '#ffffff',
+                mainBkg: '#ffffff',
+                secondBkg: '#f8fafc',
+                tertiaryBkg: '#e2e8f0',
+                
+                // Text colors with high contrast
+                primaryTextColor: '#ffffff',
+                secondaryTextColor: '#ffffff',
+                tertiaryTextColor: '#ffffff',
+                textColor: '#374151',
+                
+                // Border and line colors
+                lineColor: '#6b7280',
+                nodeBorder: '#374151',
+                clusterBkg: '#f8fafc',
+                clusterBorder: '#d1d5db',
+                
+                // Additional node colors with good contrast
+                node0: '#0f766e',
+                node1: '#d97706', 
+                node2: '#059669',
+                node3: '#7c3aed',
+                node4: '#dc2626',
+                node5: '#0891b2',
+                
+                // Ensure text on colored nodes is white
+                nodeTextColor: '#ffffff',
+                
+                // Edge labels
+                edgeLabelBackground: '#ffffff',
+                
+                // Special node types
+                fillType0: '#0f766e',
+                fillType1: '#d97706',
+                fillType2: '#059669',
+                fillType3: '#7c3aed',
+                fillType4: '#dc2626',
+                fillType5: '#0891b2',
+                fillType6: '#ea580c',
+                fillType7: '#84cc16'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            sequence: {
+                useMaxWidth: true,
+                wrap: true
+            },
+            gantt: {
+                useMaxWidth: true
+            },
+            timeline: {
+                useMaxWidth: true
+            }
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize mermaid controls after a short delay to allow rendering
+            setTimeout(initializeMermaidControls, 1000);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Active section highlighting in TOC
+        const sections = document.querySelectorAll('section[id]');
+        const tocLinks = document.querySelectorAll('.toc-fixed a[href^="#"]');
+
+        function updateActiveTocLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('bg-teal-100', 'text-teal-800', 'font-medium');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('bg-teal-100', 'text-teal-800', 'font-medium');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveTocLink);
+        updateActiveTocLink(); // Initial call
+    </script>
+  
+
+</body></html>
